@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}首頁{% endblock %}
+
+{% block content %}
+<div class="news-section">
+    <h2>最新海洋新聞快訊</h2>
+    <ul class="news-list">
+        {% for news in news_list %}
+            <li>
+                <span class="news-date">{{ news.date }}</span>
+                <a href="{{ news.url }}" target="_blank" rel="noopener noreferrer">{{ news.title }}</a>
+            </li>
+        {% empty %}
+            <li>
+                <span class="news-date">系統通知</span>
+                <a href="#">目前暫無即時快訊。</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<hr class="section-divider">
+
+<h2>最新海洋圖鑑</h2>
+
+<div class="article-grid">
+    {% for article in articles %}
+        <div class="card">
+            <h3>{{ article.title }}</h3>
+            <p>{{ article.content|truncatechars:100 }}</p>
+            <p style="font-size: 0.9em; color: #666;">建立時間：{{ article.created_at }}</p>
+            <a href="{% url 'article_detail' article.id %}"><button>閱讀更多</button></a>
+        </div>
+    {% empty %}
+        <div>
+            <p>目前還沒有文章資料。</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

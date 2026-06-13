@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}海洋保育教育網站{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4fbff;
+            color: #003049;
+        }
+
+        header {
+            background: #0077b6;
+            color: white;
+            padding: 15px 30px;
+        }
+
+        header h1 {
+            margin: 0 0 12px 0;
+            font-size: 28px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 0;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .logout-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .logout-form button {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .logout-form button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .user-info {
+            color: #dff6ff;
+            font-size: 14px;
+            margin-left: auto;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 5px solid #2a9d8f;
+            background: #d9f2e6;
+        }
+
+        .message.success {
+            background: #d9f2e6;
+            border-left-color: #2a9d8f;
+        }
+
+        .message.error {
+            background: #ffe0e0;
+            border-left-color: #d62828;
+        }
+
+        .message.warning {
+            background: #fff3cd;
+            border-left-color: #e9c46a;
+        }
+
+        .message.info {
+            background: #d6f0ff;
+            border-left-color: #219ebc;
+        }
+
+        /* 修改原本的卡片外觀，加入 Flexbox 讓按鈕可以自動對齊底部 */
+        .card {
+            border: 1px solid #ddd;
+            padding: 24px; /* 加大內邊距，讓文字不要太貼邊緣 */
+            border-radius: 10px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 讓內容散開，按鈕會自動被推到最下面 */
+        }
+
+        /* 調整卡片內的標題 */
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 20px;
+            line-height: 1.4; /* 稍微拉開標題行距 */
+            color: #003049;
+        }
+
+        /* 調整卡片內的內文段落 */
+        .card p {
+            line-height: 1.6; /* 增加內文的行距，這是解決「字擠在一起」的關鍵 */
+            color: #555; /* 讓內文顏色稍微淡一點，與標題做出層次對比 */
+            margin-bottom: 16px;
+        }
+
+        /* 針對建立時間的微調 */
+        .card .text-muted {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        /* 1. 首頁的網格排版設定 */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 一行 3 個等寬卡片 */
+            gap: 20px; /* 卡片之間的間距 */
+            margin-top: 20px;
+        }
+
+        /* 2. 🎯 關鍵：前面加上 .article-grid，代表「只有在首頁網格內」的卡片才會套用以下設定 */
+        /* 這樣就絕對不會動到文章專區的排版！ */
+        .article-grid .card {
+            border: 1px solid #ddd;
+            padding: 24px; /* 加大內邊距，讓字不要太貼邊緣 */
+            border-radius: 10px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* 讓按鈕自動對齊底部 */
+        }
+
+        /* 3. 只有首頁卡片內的標題 */
+        .article-grid .card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 20px;
+            line-height: 1.4;
+            color: #003049;
+        }
+
+        /* 4. 只有首頁卡片內的內文 */
+        .article-grid .card p {
+            line-height: 1.6; /* 拉開行距，字就不會擠在一起 */
+            color: #555;
+            margin-bottom: 16px;
+        }
+
+        /* 5. 響應式設定：手機版時自動還原成單欄直排 */
+        @media (max-width: 768px) {
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        button {
+            background: #0077b6;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #023e8a;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            border: 1px solid #bcd;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            nav {
+                align-items: flex-start;
+            }
+
+            .user-info {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+
+            main {
+                margin: 20px 12px;
+                padding: 18px;
+            }
+        }
+        /* 首頁的網格排版設定 */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 這裡設定一行 3 個等寬卡片 */
+            gap: 20px; /* 卡片之間的間距 */
+        }
+
+        /* 讓手機版時自動變成直向排列，維持好閱讀的體驗 */
+        @media (max-width: 768px) {
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* 新聞快訊區塊排版 */
+        .news-section {
+            margin-bottom: 30px;
+        }
+
+        .news-list {
+            list-style: none; /* 移除預設的圓點 */
+            padding: 0;
+            margin: 0;
+        }
+
+        .news-list li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #ccc; /* 用虛線分隔每則新聞 */
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .news-list li:last-child {
+            border-bottom: none; /* 最後一筆不顯示底線 */
+        }
+
+        /* 新聞日期標籤 */
+        .news-date {
+            background-color: #e9ecef;
+            color: #0077b6;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            white-space: nowrap; /* 防止日期斷行 */
+        }
+
+        /* 新聞標題連結 */
+        .news-list a {
+            color: #003049;
+            text-decoration: none;
+            font-size: 16px;
+            line-height: 1.5;
+            transition: color 0.2s ease;
+        }
+
+        .news-list a:hover {
+            color: #0077b6; /* 滑鼠懸停時改變顏色提供回饋 (Feedback) */
+            text-decoration: underline;
+        }
+
+        /* 區塊分隔線 */
+        .section-divider {
+            border: 0;
+            height: 2px;
+            background: #e0e0e0;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SDGs 14 海洋保育教育網站</h1>
+
+        <nav>
+            <a href="{% url 'home' %}">首頁</a>
+            <a href="{% url 'article_list' %}">海洋圖鑑</a>
+            <a href="{% url 'quiz_list' %}">海洋測驗</a>
+            <a href="{% url 'report_pollution' %}">污染通報</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">會員中心</a>
+
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">登出</button>
+                </form>
+
+                <span class="user-info">歡迎，{{ user.username }}</span>
+            {% else %}
+                <a href="{% url 'login' %}">登入</a>
+                <a href="{% url 'register' %}">註冊</a>
+            {% endif %}
+
+            <a href="/admin/">後台</a>
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}填寫海洋污染通報{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2>🚨 海洋污染觀測通報</h2>
+    <p>如果您在臺灣沿海發現任何海洋污染事件，請填寫下方表單協助進行學術記錄。</p>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">送出通報</button>
+    </form>
+</div>
+{% endblock %}

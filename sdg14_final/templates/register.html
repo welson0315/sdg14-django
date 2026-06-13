@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}會員註冊{% endblock %}
+
+{% block content %}
+<h2>會員註冊</h2>
+
+{% if form.errors %}
+  <div class="error-box">
+    {{ form.errors }}
+  </div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">註冊</button>
+</form>
+
+<p>已經有帳號了？<a href="{% url 'login' %}">前往登入</a></p>
+{% endblock %}

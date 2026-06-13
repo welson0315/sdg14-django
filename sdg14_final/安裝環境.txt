@@ -1,0 +1,16 @@
+解壓縮完把ocean_guard從資料夾拉出來
+把原本的venv資料夾刪掉
+
+在power shell執行
+
+建立虛擬環境
+python -m venv .venv
+
+啟動虛擬環境 (Windows)
+.venv\Scripts\activate
+
+確保已在專案根目錄
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserve

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}測驗作答{% endblock %}
+
+{% block content %}
+<h2>{{ quiz.title }}</h2>
+<p>{{ quiz.description }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% for question in questions %}
+        <div class="card">
+            <p><strong>{{ forloop.counter }}. {{ question.question_text }}</strong></p>
+            <label><input type="radio" name="{{ question.id }}" value="A"> {{ question.option_a }}</label><br>
+            <label><input type="radio" name="{{ question.id }}" value="B"> {{ question.option_b }}</label><br>
+            <label><input type="radio" name="{{ question.id }}" value="C"> {{ question.option_c }}</label><br>
+            <label><input type="radio" name="{{ question.id }}" value="D"> {{ question.option_d }}</label><br>
+        </div>
+    {% endfor %}
+    <button type="submit">提交測驗</button>
+</form>
+{% endblock %}

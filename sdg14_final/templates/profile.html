@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}會員中心{% endblock %}
+
+{% block content %}
+<h2>會員中心</h2>
+<p>目前登入帳號：{{ user.username }}</p>
+
+<h3>我的收藏文章</h3>
+{% for article in favorite_articles %}
+    <div class="card">
+        <h4>{{ article.title }}</h4>
+        <a href="{% url 'article_detail' article.id %}">查看文章</a>
+    </div>
+{% empty %}
+    <p>你目前還沒有收藏文章。</p>
+{% endfor %}
+
+<hr>
+
+<h3>我的測驗紀錄</h3>
+{% for result in quiz_results %}
+    <div class="card">
+        <p>測驗：{{ result.quiz.title }}</p>
+        <p>分數：{{ result.score }}</p>
+        <p>作答時間：{{ result.submitted_at }}</p>
+    </div>
+{% empty %}
+    <p>目前還沒有測驗紀錄。</p>
+{% endfor %}
+{% endblock %}

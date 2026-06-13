@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}海洋測驗{% endblock %}
+
+{% block content %}
+<h2>海洋知識測驗</h2>
+
+{% for quiz in quizzes %}
+    <div class="card">
+        <h3>{{ quiz.title }}</h3>
+        <p>{{ quiz.description }}</p>
+        <a href="{% url 'quiz_detail' quiz.id %}">開始作答</a>
+    </div>
+{% empty %}
+    <p>目前還沒有測驗資料。</p>
+{% endfor %}
+{% endblock %}

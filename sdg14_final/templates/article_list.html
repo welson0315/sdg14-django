@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}文章列表{% endblock %}
+
+{% block content %}
+<h2>文章列表</h2>
+
+{% for article in articles %}
+    <div class="card">
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.content|truncatechars:120 }}</p>
+        <p>收藏數：{{ article.total_favorites }}</p>
+        <a href="{% url 'article_detail' article.id %}">查看文章</a>
+    </div>
+{% empty %}
+    <p>目前沒有文章。</p>
+{% endfor %}
+{% endblock %}

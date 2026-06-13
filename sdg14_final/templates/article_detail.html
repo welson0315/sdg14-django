@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}文章詳情{% endblock %}
+
+{% block content %}
+<h2>{{ article.title }}</h2>
+
+{% if article.image %}
+    <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width: 300px; margin-bottom: 15px;">
+{% endif %}
+
+<p>{{ article.content }}</p>
+<p>建立時間：{{ article.created_at }}</p>
+<p>收藏數：{{ article.total_favorites }}</p>
+
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'toggle_favorite' article.id %}">
+        {% csrf_token %}
+        {% if is_favorite %}
+            <button type="submit">取消收藏</button>
+        {% else %}
+            <button type="submit">收藏文章</button>
+        {% endif %}
+    </form>
+
+    <hr>
+    <h3>我要留言</h3>
+    <form method="post" action="{% url 'add_comment' article.id %}">
+        {% csrf_token %}
+        <textarea name="content" rows="4" placeholder="請輸入留言內容"></textarea>
+        <button type="submit">送出留言</button>
+    </form>
+{% else %}
+    <p>請先登入後才能收藏與留言。</p>
+{% endif %}
+
+<hr>
+<h3>留言區</h3>
+{% for comment in comments %}
+    <div class="card">
+        <strong>{{ comment.user.username }}</strong>
+        <p>{{ comment.content }}</p>
+        <small>{{ comment.created_at }}</small>
+    </div>
+{% empty %}
+    <p>目前還沒有留言。</p>
+{% endfor %}
+{% endblock %}

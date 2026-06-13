@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}測驗結果{% endblock %}
+
+{% block content %}
+<h2>{{ quiz.title }} - 測驗結果</h2>
+<p>你的分數是：{{ score }} / {{ total }}</p>
+<a href="{% url 'quiz_list' %}">回到測驗列表</a>
+{% endblock %}
